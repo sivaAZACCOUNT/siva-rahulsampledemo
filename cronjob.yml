@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: job
+metadata:
+  name: job-example
+spec:
+  completions: 1
+  parallelism: 1
+  activeDeadlineSeconds: 10
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - image: k8s.gcr.io/busybox
+          name: busybox
+          command:
+            - echo
+            - "Hello cronjob"
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cronjob-example
+spec:
+  schedule: "*/2 * * *"
+  completions: 3
+  parallelism: 1
+  activeDeadlineSeconds: 10
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - image: k8s.gcr.io/busybox
+          name: busybox
+          command:
+            - echo
+            - "Hello cronjob"

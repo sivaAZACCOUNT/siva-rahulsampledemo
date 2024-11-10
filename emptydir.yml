@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-emptydir
+  labels:
+    app: volume
+spec:
+  containers:
+  - name: alpine 
+    image: alpine
+    resources:
+      limits:
+        cpu: 200m
+        memory: 500Mi
+      requests:
+        cpu: 100m
+        memory: 200Mi
+    commands:
+      [
+        "sh",
+        "-c",
+        'mkdir /var/mydoc; while true; do echo "random message text 'data'" >> var/mydoc/index.html;sleep 10;done',
+      ]
+    ports:
+    - containerPort:  80
+      name:  http
+    volumeMounts:
+    - name: vol-emptydir
+      mountPath: /var/mydoc
+  volumes:
+    - name: vol-emptydir
+      emptyDir: {}

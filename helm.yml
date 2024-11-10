@@ -1,0 +1,39 @@
+# COMPONENTS OF THE HELM CAHRT
+nginx-chart/
+  -- chart.yml
+  -- charts
+  -- templates
+       -- NOTES.txt
+       -- _helper.tpl
+       -- deployment.yml
+       -- configmap.yml
+       -- ingress.yml
+       -- tests
+            -- test-connection.yml
+  -- dev-values.yml
+  --qa-values.yml
+  --pro-values.yml
+
+---
+.helmignore: it is used to define all the files that we dont want to include the helm chart
+
+chart.yml: it contains information about the helm chart like version, name, description, type, maintainer etc..
+
+charts: we can add another chart's structure inside this directory if out main charts have some 
+        dependency on others. by default this directory is empty ..
+
+templates: this directory contains all the k8s manifest files that form an application
+           by default helm charts creates some default templates for k8s objects like service, deployment etc..
+
+values.yml: in this file wwe define the values for the yml template image name,replica
+            count, HPA values, secrets, etc... and we can override these values dynamically or at the 
+            time of installing the chart using -- values
+
+NODES.txt: this is text file that print out after the chart is successfully deployed
+
+_helper.tpl: helm allows for the use of GO templating in resource files for k8s
+
+tests: we can define tests on our charts gto validate that your  chart works as expected when it in installed
+
+---
+helm install nginx-chart -f dev-values.yml

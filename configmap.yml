@@ -1,0 +1,29 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: configmap-db
+data:
+  db_host: "primark-sql-server.database.windows.net"
+  db_port: "1433"
+  db_name: "primark"
+  db_user: "Admin"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name:  configmap-pod
+spec:
+  containers:
+    - name: busybox
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+        limits:
+          cpu: 200m
+          memory: 500Mi
+      image: busybox
+      command: ["bin/bash","-c","env"]
+      envFrom:
+        - configMapRef:
+          name: configmap-db

@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name:  ltfcpwert
+  labels:
+    app: ltfcpwert
+spec:
+  replicas: 4
+  selector:
+    matchlabels:
+      app: ltfcpwert
+  template:
+    metadata:
+      labels:
+        app: ltfcpwert
+    spec:
+      containers:
+      - name: ltfcpwert
+        image: nginx
+        resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+        limits:
+          cpu: 200m
+          memory: 500Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ltfcpwert
+spec:
+  selector:
+    app: ltfcpwert
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ltfcpwert
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+spec:
+  rules:
+  - http:
+      path: /men
+      backend:
+        service:
+          name: ltfcpwert
+          port:
+            number: 80
+      pathtype: exact
